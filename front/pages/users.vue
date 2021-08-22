@@ -1,7 +1,16 @@
 <template>
   <v-container>
     <v-row align="center" justify="center">
-      <v-col>
+      <v-col cols="12">
+        <v-text-field
+          label="Username"
+          v-model="name"
+          prepend-icon=""
+          type="text"
+        />
+        <v-btn color="primary" @click="createUser">ADD USER</v-btn>
+      </v-col>
+      <v-col cols="12">
         <h1>Hello, World!</h1>
       </v-col>
     </v-row>
@@ -35,6 +44,7 @@ import axios from "~/plugins/axios"
 export default {
   data() {
     return {
+      name: "",
       users: []
     }
   },
@@ -46,6 +56,18 @@ export default {
         this.users = res.data
       }
     })
+  },
+
+  methods: {
+    // userをaxiosで登録
+    createUser() {
+      axios.post("/users", {name: this.name})
+      .then(res => {
+        if (res.data) {
+          this.users.push(res.data)
+        }
+      })
+    }
   }
 }
 </script>
