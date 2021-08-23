@@ -1,5 +1,7 @@
-import axios from "axios"
+export default function({ $axios, redirect }) {
+  $axios.setToken('access_token')
 
-export default axios.create ({
-  baseURL: "http://localhost:3000"
-})
+  $axios.onResponse(config => {
+    $axios.setHeader('Access-Control-Allow-Origin', '*')
+  })
+}
