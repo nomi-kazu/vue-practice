@@ -1,6 +1,12 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+
+  watchers: {
+    webpack: {
+      poll: true
+    }
+  },
   mode: 'spa',
   /*
   ** Headers of the page
@@ -30,6 +36,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    'plugins/axios',
+    'plugins/vuetify'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -42,7 +50,32 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
+  axios: {
+    proxy: true,
+    baseURL: 'http:localhost:3000'
+  },
+  proxy: {
+    '/api/': { target: 'http://api:3000', pathRewrite: { '^/api/': '/' } }
+  },
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: false,
+      home: '/'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/sign_in', method: 'post', propertyName: false },
+          logout: false,
+          user: false
+        }
+      }
+    }
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
