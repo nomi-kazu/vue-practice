@@ -88,5 +88,9 @@ export default {
       this.loader = null
     },
   },
+
+  created() {
+    console.log("API_KEY:", process.env.API_KEY);
+  }
 }
 </script>
