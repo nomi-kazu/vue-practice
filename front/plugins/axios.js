@@ -10,5 +10,5 @@ export default function({ $axios, redirect }) {
 // import axios from "axios";
 
 // export default axios.create({
-//   baseURL
+//   baseURL: process.env.API_ENDPOINT
 // })

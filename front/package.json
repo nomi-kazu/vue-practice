@@ -21,6 +21,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "cross-env": "^7.0.3",
     "date-fns": "^2.23.0",
+    "firebase": "^9.0.0",
     "firebase-tools": "^9.16.5",
     "js-cookie": "^3.0.0",
     "ladash": "^1.2.0",

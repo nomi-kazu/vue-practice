@@ -8,7 +8,7 @@ export default {
       poll: true
     }
   },
-  mode: 'spa',
+  ssr: false,
   /*
   ** Headers of the page
   */
