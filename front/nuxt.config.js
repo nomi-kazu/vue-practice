@@ -37,7 +37,6 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/axios',
     '@/plugins/vuetify',
     '@/plugins/auth-check',
     '@/plugins/vee-validate'
@@ -56,12 +55,19 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/dotenv',
   ],
+  proxy: {
+    '/api': {
+      target: 'http://api:3000/',
+      pathRewrite: {
+        '^/api': '',
+      }
+    }
+  },
   axios: {
     proxy: true,
+    // baseURL: process.env.APT_ENDPOINT
   },
-  proxy: {
-    // '/api/': { target: 'http://api:3000', pathRewrite: { '^/api/': '/' } }
-  },
+  
   auth: {
     redirect: {
       login: '/login',

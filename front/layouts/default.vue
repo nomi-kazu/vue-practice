@@ -17,19 +17,17 @@
         AppName
       </v-btn>
       <v-spacer />
-      <LoginBtn />
+      <LoginBtn v-show="!isLoggedIn" />
+      <h1 v-show="isLoggedIn" class="white--text font-weight-thin mb-1 col-auto" text large>
+        こんにちは！ {{ userName }}
+      </h1>
       <SignupBtn />
-      <v-btn v-show="isLoggedIn" class="white--text" text large @click="logout">
-        ログアウト
-      </v-btn>
       <v-btn
         v-if="isLoggedIn"
-        class="white--text"
-        color="blue-grey"
+        dark
         @click.stop="rightDrawer = !rightDrawer"
       >
-        {{ user.user.name }}
-        <v-icon right>
+        <v-icon>
           mdi-menu
         </v-icon>
       </v-btn>
@@ -48,7 +46,7 @@
           <h1 class="display-2 font-weight-thin mb-4">
             - AppName -
           </h1>
-          <h4 class="display-2 font-weight-thin mb-4">
+          <h4 class="display-1 font-weight-thin mb-4">
             subtitle
           </h4>
           <v-btn
@@ -67,11 +65,6 @@
     </v-parallax>
 
     <v-content>
-      <!-- auth処理時アラート -->
-      <SuccessLogin />
-      <FailedLogin />
-      <SuccessLogout />
-
       <v-container fill-height>
         <!-- 各ページ挿入 -->
         <nuxt />
@@ -80,28 +73,16 @@
     <!-- 右のnavigation -->
     <v-navigation-drawer v-model="rightDrawer" right temporary fixed>
       <v-list>
-        <!-- 右list内 ホームボタン -->
-        <v-list-item nuxt to="/" exact>
-          <v-list-item-action>
-            <v-icon>mdi-apps</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>ホーム</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- 右list内 お気に入りボタン（ログイン時のみ表示） -->
+        <!-- 右list内 ログアウトボタン（ログイン時のみ表示） -->
         <v-list-item
           v-if="isLoggedIn"
-          nuxt
-          to="/favorites"
-          exact
+          @click="logout"
         >
           <v-list-item-action>
             <v-icon>fas fa-heart</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>お気に入り</v-list-item-title>
+            <v-list-item-title>ログアウト</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -139,32 +120,6 @@
             <v-list-item-title>みんなの写真</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- 右list内 ログインボタン（未ログイン時のみ表示） -->
-        <v-list-item
-          v-if="!isLoggedIn"
-          nuxt
-          to="/login"
-          exact
-        >
-          <v-list-item-action />
-          <v-list-item-content>
-            <v-list-item-title>ログイン</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- 右list内 サインアップボタン（未ログイン時のみ表示） -->
-        <v-list-item
-          v-if="!isLoggedIn"
-          nuxt
-          to="/sign_up"
-          exact
-        >
-          <v-list-item-action />
-          <v-list-item-content>
-            <v-list-item-title>サインアップ</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -182,16 +137,71 @@
         </v-col>
       </v-footer>
     </v-card>
+    <Success/>
+    <Loading></Loading>
   </v-app>
 </template>
 
 <script>
+import firebase from "@/plugins/firebase";
+import LoginBtn from "~/components/LoginBtn";
+import SignupBtn from "~/components/SignupBtn";
+import Loading from "~/components/Loading";
+import Success from "~/components/Success";
 
+export default {
+  components: {
+    LoginBtn,
+    SignupBtn,
+    Loading,
+    Success,
+  },
+
+  data() {
+    return {
+      fixed: false,
+      rightDrawer: false,
+      title: "",
+    }
+  },
+
+  computed: {
+    isLoggedIn() {
+      console.log(this.$store.state.isLoggedIn);
+      return this.$store.state.isLoggedIn;
+    },
+
+    userName() {
+      return this.$store.state.name;
+    }
+  },
+
+  methods: {
+    logout() {
+      firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.$store.commit("setNotice", {
+          status: true,
+          message: "ログアウト成功!"
+        });
+        setTimeout(() => {
+          this.$store.commit("setNotice", {});
+        }, 2000); // 2秒後に隠す
+        this.$store.commit("login", null);
+        this.rightDrawer = false;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
+  }
+}
 </script>
 
 <style scoped>
   .v-parallax__image {
-    transform: none !important;
-    width: 100% !important;
+    filter: blur(3px) contrast(0.9);
   }
 </style>

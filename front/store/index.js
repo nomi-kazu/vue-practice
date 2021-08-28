@@ -3,39 +3,33 @@ import Vuex from "vuex"
 
 Vue.use(Vuex)
 
-const store = () => {
-  return new Vuex.Store({
-    state: {
-      name: "",
-      isLoggedIn: false,
-      loading: false,
-      notification: {
-        status: false,
-        message: "",
-      }
-    },
+export const state = () => ({
+  name: "",
+  isLoggedIn: false,
+  loading: false,
+  notification: {
+    status: false,
+    message: "",
+  }
+})
 
-    mutations: {
-      login (state, user) {
-        if (!user){
-          state.name = "";
-          state.isLoggedIn = false;
-        } else {
-          state.name = user.name;
-          state.isLoggedIn = true;
-          console.log(state);
-        }
-      },
-
-      setLoading(state, payload) {
-        state.loading = payload;
-      },
-
-      setNotice(state, payload) {
-        state.notification = payload
-      }
+export const mutations = {
+  login (state, user) {
+    if (!user){
+      state.name = "";
+      state.isLoggedIn = false;
+    } else {
+      state.name = user.name;
+      state.isLoggedIn = true;
+      console.log(state);
     }
-  })
-}
+  },
 
-export default store
+  setLoading(state, payload) {
+    state.loading = payload;
+  },
+
+  setNotice(state, payload) {
+    state.notification = payload
+  }
+}
