@@ -1,7 +1,14 @@
+require('dotenv').config();
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  mode: 'spa',
+
+  watchers: {
+    webpack: {
+      poll: true
+    }
+  },
+  ssr: false,
   /*
   ** Headers of the page
   */
@@ -30,6 +37,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@/plugins/vuetify',
+    '@/plugins/auth-check',
+    '@/plugins/vee-validate'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -42,7 +52,39 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
+    '@nuxtjs/dotenv',
   ],
+  proxy: {
+    '/api': {
+      target: 'http://api:3000/',
+      pathRewrite: {
+        '^/api': '',
+      }
+    }
+  },
+  axios: {
+    proxy: true,
+    // baseURL: process.env.APT_ENDPOINT
+  },
+  
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: false,
+      home: '/'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/sign_in', method: 'post', propertyName: false },
+          logout: false,
+          user: false
+        }
+      }
+    }
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

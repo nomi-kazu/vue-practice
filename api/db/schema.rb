@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(version: 2021_08_22_091815) do
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
+    t.string "email"
+    t.string "uid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
