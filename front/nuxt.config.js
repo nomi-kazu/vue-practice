@@ -67,7 +67,6 @@ export default {
     '/hotpepper': {
       target: 'http://webservice.recruit.co.jp/hotpepper',
       pathRewrite: { '^/hotpepper': '' }
-      }
     }
   },
   axios: {
