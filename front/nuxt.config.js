@@ -22,8 +22,16 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    //google maps api のソースファイル
+    script: [
+      {
+        src: 
+        "https://maps.google.com/maps/api/js?key=" + process.env.MAP_API_KEY
+      }
     ]
   },
+  
   /*
   ** Customize the progress-bar color
   */
@@ -56,10 +64,9 @@ export default {
     '@nuxtjs/dotenv',
   ],
   proxy: {
-    '/api': {
-      target: 'http://api:3000/',
-      pathRewrite: {
-        '^/api': '',
+    '/hotpepper': {
+      target: 'http://webservice.recruit.co.jp/hotpepper',
+      pathRewrite: { '^/hotpepper': '' }
       }
     }
   },
